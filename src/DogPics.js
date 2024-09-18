@@ -18,7 +18,8 @@ const DogPics=()=>{
             }
             try{
                 const response=await apiURl.json();
-                setDogImage(response.data.message)
+                console.log(response)
+                setDogImage(response.message)
             }catch(error){
                 console.error("Error fetching dog images: ",error)
             }
@@ -33,6 +34,7 @@ const DogPics=()=>{
    
     return(
         <div>
+            <div style={{margin: '10px'}}>
             <span>Select a breed:</span>
             <select  name={breed} onChange={handleBreedChange}>
                 <option value="Random">Random</option>
@@ -40,7 +42,12 @@ const DogPics=()=>{
                 <option value="Damatian">Dalmatian</option>
                 <option value="Husky">Husky</option>
             </select>
+            </div>
+           
+            <div>
             <img src={dogImage} alt="Dog" style={{maxWidth: '300px'}}></img>
+            </div>
+           
             <div>
             <button onClick={handleNextButtonOnClick} >Next</button>
             </div>
