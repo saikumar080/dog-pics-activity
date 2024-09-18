@@ -1,23 +1,48 @@
-import React,{useState} from "react";
-function DogPics(){
-    
-    const images=async(id)=>{
-        const response=await fetch(`https://dog.ceo/api/breeds/image/+${id}`);
-        const data=await response.json();
-        return data;
-    }
+import React,{useState,useEffect} from "react";
+
+
+const DogPics=()=>{
+        const [breed,setBreed]=useState("Random");
+        const [dogImage, setDogImage]= useState(null);
+        useEffect(()=>{
+            fetchRandomDogImage();
+        },[]);
+
+
+        const fetchRandomDogImage=async ()=>{
+            let apiURl= await fetch("https://dog.ceo/api/breeds/image/random");
+            console.log(apiURl);
+            if(breed !=="Random"){
+                apiURl=`https://dog.ceo/api/breeds/${breed.toLowerCase()}image/random`;
+
+            }
+            try{
+                const response=await apiURl.json();
+                setDogImage(response.data.message)
+            }catch(error){
+                console.error("Error fetching dog images: ",error)
+            }
+        };
+        const handleBreedChange=(event) => {
+            setBreed(event.target.value);
+            fetchRandomDogImage();
+        };
+        const handleNextButtonOnClick=() =>{
+            fetchRandomDogImage();
+        }
    
     return(
         <div>
             <span>Select a breed:</span>
-            <select  name="breed">
+            <select  name={breed} onChange={handleBreedChange}>
                 <option value="Random">Random</option>
                 <option value="Beagle">Beagle</option>
                 <option value="Damatian">Dalmatian</option>
                 <option value="Husky">Husky</option>
             </select>
+            <img src={dogImage} alt="Dog" style={{maxWidth: '300px'}}></img>
             <div>
-            <button onClick={images}>Next</button>
+            <button onClick={handleNextButtonOnClick} >Next</button>
             </div>
             
         </div>
